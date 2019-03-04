@@ -10,8 +10,8 @@ type Repo struct {
 	Conn *gorm.DB
 }
 
-func New(db *gorm.DB) Repo {
-	return Repo{Conn: db}
+func New(db *gorm.DB) (Repo, error) {
+	return Repo{Conn: db}, nil
 }
 
 func (r *Repo) Get(ID string) model.Data {

@@ -28,20 +28,20 @@ func init() {
 }
 
 func main() {
-	e, _ := InitializeEvent()
+	e, _ := InitializeApp()
 	e.Start()
 }
 
-type Event struct {
+type App struct {
 	HTTP http.Handler
 	GRPC grpc.Handler
 }
 
-func NewEvent(h http.Handler, g grpc.Handler) Event {
-	return Event{HTTP: h, GRPC: g}
+func NewApp(h http.Handler, g grpc.Handler) App {
+	return App{HTTP: h, GRPC: g}
 }
 
-func (e Event) Start() {
+func (e App) Start() {
 	go e.HTTP.Instance.Start(viper.GetString(`server.address`))
 
 	lis, err := net.Listen("tcp", viper.GetString(`grpc.address`))

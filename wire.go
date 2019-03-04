@@ -11,7 +11,7 @@ import (
 	"github.com/rizkix/wired/repo"
 )
 
-func InitializeEvent() (Event, error) {
-	wire.Build(NewEvent, controller.New, repo.New, plugin.NewMysqlConnection, http.New, grpc.New)
-	return Event{}, nil
+func InitializeApp() (App, error) {
+	wire.Build(NewApp, controller.New, repo.New, plugin.NewMysqlConnection, http.New, grpc.New)
+	return App{}, nil
 }
