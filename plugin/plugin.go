@@ -33,7 +33,7 @@ func NewMysqlConnection() *gorm.DB {
 		os.Exit(1)
 	}
 
-	dbConn.LogMode(true)
+	dbConn.LogMode(viper.GetBool(`debug`))
 
 	return dbConn
 }
