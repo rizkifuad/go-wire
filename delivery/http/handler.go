@@ -17,12 +17,13 @@ func New(c controller.Controller) Handler {
 
 	handler := Handler{
 		Controller: c,
+		Instance:   e,
 	}
 
 	e.GET("/ping", handler.Ping)
 	e.GET("/repo", handler.Get)
 
-	return Handler{Instance: e}
+	return handler
 }
 
 func (h *Handler) Ping(c echo.Context) error {

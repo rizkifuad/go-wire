@@ -21,7 +21,8 @@ func (s *Handler) GetResourceId(ctx context.Context, in *pb.Request) (*pb.Respon
 
 func New(c controller.Controller) Handler {
 	s := grpc.NewServer()
-	pb.RegisterDataServer(s, &Handler{Controller: c})
+	handler := Handler{Controller: c, Instance: s}
+	pb.RegisterDataServer(s, &handler)
 
-	return Handler{Instance: s}
+	return handler
 }
