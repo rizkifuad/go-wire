@@ -4,7 +4,7 @@ test:
 	go test -v -cover -covermode=atomic ./...
 
 start:
-	go build -o ${BINARY} && ./${BINARY}
+	wire && go build -o ${BINARY} && ./${BINARY}
 
 engine:
 	go build -o ${BINARY}
