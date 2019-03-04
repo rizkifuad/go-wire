@@ -1,4 +1,6 @@
-# Getting started
+# go-wire
+
+##  Getting started
 
 ```
 # Install golang wire
