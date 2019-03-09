@@ -13,8 +13,10 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/rizkix/wired/delivery/grpc"
-	"github.com/rizkix/wired/delivery/http"
+	"github.com/rizkix/wired/config"
+	"google.golang.org/grpc"
+
+	"github.com/labstack/echo"
 )
 
 func init() {
@@ -41,17 +43,18 @@ func main() {
 }
 
 type App struct {
-	HTTP http.Handler
-	GRPC grpc.Handler
+	Config config.Config
+	GRPC   *grpc.Server
+	HTTP   *echo.Echo
 }
 
-func NewApp(h http.Handler, g grpc.Handler) App {
-	return App{HTTP: h, GRPC: g}
+func NewApp(c config.Config, h *echo.Echo, g *grpc.Server) App {
+	return App{Config: c, HTTP: h, GRPC: g}
 }
 
 func (e App) Start() {
 	go func() {
-		e.HTTP.Instance.Start(viper.GetString(`server.address`))
+		e.HTTP.Start(viper.GetString(`server.address`))
 	}()
 
 	go func() {
@@ -60,7 +63,7 @@ func (e App) Start() {
 			log.Fatalf("failed to listen: %v", err)
 		}
 
-		if err := e.GRPC.Instance.Serve(lis); err != nil {
+		if err := e.GRPC.Serve(lis); err != nil {
 			log.Fatalf("failed to serve: %v", err)
 		}
 	}()
@@ -76,10 +79,10 @@ func (e App) Start() {
 	ctx, cancel := context.WithTimeout(context.Background(), duration)
 	defer cancel()
 
-	if err := e.HTTP.Instance.Shutdown(ctx); err != nil {
+	if err := e.HTTP.Shutdown(ctx); err != nil {
 		fmt.Printf("Failed to shut down server gracefully: %s", err)
 	}
 
-	e.GRPC.Instance.GracefulStop()
+	e.GRPC.GracefulStop()
 	fmt.Printf("Server shutted down")
 }

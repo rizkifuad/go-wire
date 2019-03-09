@@ -9,21 +9,19 @@ import (
 
 type Handler struct {
 	Controller controller.Controller
-	Instance   *echo.Echo
 }
 
-func New(c controller.Controller) Handler {
+func New(c controller.Controller) *echo.Echo {
 	e := echo.New()
 
 	handler := Handler{
 		Controller: c,
-		Instance:   e,
 	}
 
 	e.GET("/ping", handler.Ping)
 	e.GET("/repo", handler.Get)
 
-	return handler
+	return e
 }
 
 func (h *Handler) Ping(c echo.Context) error {

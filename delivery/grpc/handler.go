@@ -11,7 +11,6 @@ import (
 
 type Handler struct {
 	Controller controller.Controller
-	Instance   *grpc.Server
 }
 
 func (h *Handler) GetResourceId(ctx context.Context, in *pb.Request) (*pb.Response, error) {
@@ -19,11 +18,11 @@ func (h *Handler) GetResourceId(ctx context.Context, in *pb.Request) (*pb.Respon
 	return &pb.Response{ResourceId: a.ResourceID}, nil
 }
 
-func New(c controller.Controller) Handler {
+func New(c controller.Controller) *grpc.Server {
 	s := grpc.NewServer()
-	handler := Handler{Controller: c, Instance: s}
+	handler := Handler{Controller: c}
 
 	pb.RegisterDataServer(s, &handler)
 
-	return handler
+	return s
 }
