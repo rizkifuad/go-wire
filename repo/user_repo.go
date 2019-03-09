@@ -2,16 +2,18 @@ package repo
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/rizkix/wired/config"
 
 	"github.com/rizkix/wired/model"
 )
 
 type Repo struct {
-	Conn *gorm.DB
+	Conn   *gorm.DB
+	Config config.Config
 }
 
-func New(db *gorm.DB) (Repo, error) {
-	return Repo{Conn: db}, nil
+func New(config config.Config, db *gorm.DB) (Repo, error) {
+	return Repo{Config: config, Conn: db}, nil
 }
 
 func (r *Repo) Get(ID string) model.Data {

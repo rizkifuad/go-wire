@@ -6,6 +6,7 @@
 package main
 
 import (
+	"github.com/rizkix/wired/config"
 	"github.com/rizkix/wired/controller"
 	"github.com/rizkix/wired/delivery/grpc"
 	"github.com/rizkix/wired/delivery/http"
@@ -20,17 +21,18 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() (App, error) {
+	configConfig := config.New()
 	db, err := plugin.NewMysqlConnection()
 	if err != nil {
 		return App{}, err
 	}
-	repoRepo, err := repo.New(db)
+	repoRepo, err := repo.New(configConfig, db)
 	if err != nil {
 		return App{}, err
 	}
-	controllerController := controller.New(repoRepo)
+	controllerController := controller.New(configConfig, repoRepo)
 	handler := http.New(controllerController)
 	grpcHandler := grpc.New(controllerController)
-	app := NewApp(handler, grpcHandler)
+	app := NewApp(configConfig, handler, grpcHandler)
 	return app, nil
 }

@@ -4,6 +4,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	"github.com/rizkix/wired/config"
 	"github.com/rizkix/wired/controller"
 	"github.com/rizkix/wired/delivery/grpc"
 	"github.com/rizkix/wired/delivery/http"
@@ -12,6 +13,6 @@ import (
 )
 
 func InitializeApp() (App, error) {
-	wire.Build(NewApp, controller.New, repo.New, plugin.NewMysqlConnection, http.New, grpc.New)
+	wire.Build(NewApp, config.New, controller.New, repo.New, plugin.NewMysqlConnection, http.New, grpc.New)
 	return App{}, nil
 }
